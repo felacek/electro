@@ -5,6 +5,7 @@ import controller
 
 class Server(BaseHTTPRequestHandler):
     def do_GET(self):
+        
         self.send_response(200)
         self.send_header("Content-type", "text/plain")
         self.end_headers()
@@ -20,9 +21,9 @@ class Server(BaseHTTPRequestHandler):
         print(res)
         self.wfile.write(bytes(res, "utf-8"))
         
-def run(hostName, serverPort):
-    httpd = HTTPServer((hostName, serverPort), Kramakar)
-    print("Server started http://%s:%s" % (hostName, serverPort))
+def run(hostName):
+    httpd = HTTPServer((hostName, 80), Server)
+    print("Server started http://%s:80" % (hostName))
     try:
          httpd.serve_forever()
     except KeyboardInterrupt:

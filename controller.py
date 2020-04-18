@@ -1,16 +1,33 @@
 import json
-import secrets
-
-def parse(data):
-    try:
-        return json.loads(data.decode("utf-8"))
-    except:
-        return 0
+import time
+import saveread
 
 def decode(path, body):
-    data = parse(body)
-    res = {"code": 0, "msg": "incorrect path"}
+    res = {"code": 0, "res": "", "msg": "something went wrong", "time": time.ctime()}
     if(path == '/sendOne'):
+        res["res"] = str(saveread.save(body))
         res["code"] = 1
-        res["msg"] = ("In left:\nVoltage: %s V\nCurrent: %s A\nIn center:\n Voltage: %s V\nCurrent: %s A\nIn center:\nVoltage: %s V\nCurrent: %s A\n\n" % (data["lu"],  data["li"], data["cu"], data["ci"], data["ru"], data["ri"]))
+        res["msg"] = "successfully added"
+    if(path == '/count'):
+        res["res"] = saveread.count()
+        res["msg"] = "count successful"
+        res["code"] = 1
+    if(path == '/readOne'):
+        res["res"] = saveread.read()
+        res["msg"] = "read successful"
+        res["code"] = 1
+    if(path == '/readSpecific'):
+        ret = saveread.readspec(body)
+        if (ret):
+            res["res"] = ret
+            res["code"] = 1
+            res["msg"] = "read successful"
+        else:
+            res["code"] = 0
+            res["msg"] = "does not exist"
+    if(path == '/readAll'):
+        res["res"] = saveread.readall()
+        res["code"] = 1
+        res["msg"] = "read successful"
+        
     return json.dumps(res)
