@@ -1,19 +1,19 @@
 import pymongo as pm
-from bson.json_util import dumps
+from bson.json_util import dumps,loads
 import time
 import urllib.parse as up
 
 def init():
     un = up.quote_plus('root')
     pa = up.quote_plus('example')
-    client = pm.MongoClient("mongodb://%s:%s@172.17.0.2:27017" % (un, pa))
+    client = pm.MongoClient("mongodb://%s:%s@mongo_mongo_1:27017" % (un, pa))
     db = client["electro"]
     col = db["primary"]
     return col
 
 def parse(data):
     try:
-        return json.loads(data.decode("utf-8"))
+        return loads(data.decode("utf-8"))
     except:
         return 0
 
